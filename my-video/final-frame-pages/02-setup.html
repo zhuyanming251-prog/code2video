@@ -3,168 +3,162 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=1920, height=1080" />
-  <title>02-setup</title>
+  <title>02-setup final still</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>html,body{margin:0;padding:0;background:#000;overflow:hidden;width:1920px;height:1080px;}</style>
 </head>
-<body style="margin:0;background:#000;overflow:hidden;">
+<body>
+
 <style>
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   #root {
     position: absolute; inset: 0; width: 1920px; height: 1080px;
-    overflow: hidden; background: #07090d; color: #F2F2F2;
-    font-family: Inter, "Helvetica Neue", sans-serif;
-    perspective: 1400px;
+    overflow: hidden; background: #0a0c10; color: #F2F2F2;
+    font-family: "IBM Plex Sans", "Helvetica Neue", sans-serif;
   }
   .layer { position: absolute; inset: 0; }
   .bg-img {
-    position: absolute; inset: -4%;
+    position: absolute; inset: -2%;
     background-size: cover; background-position: center;
-    filter: contrast(1.08) saturate(0.85);
-    transform: scale(1.06);
+    transform: scale(1.04);
   }
   .dv-grade {
-    filter: contrast(1.2) saturate(0.7) sepia(0.18) hue-rotate(-8deg) brightness(0.92);
+    filter: contrast(1.12) saturate(0.78) sepia(0.12) hue-rotate(-6deg) brightness(0.98);
   }
   .grain {
-    position: absolute; inset: 0; pointer-events: none; opacity: 0.16; mix-blend-mode: overlay;
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.14; mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   }
   .scanlines {
-    position: absolute; inset: 0; pointer-events: none; opacity: 0.12;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.35) 2px, rgba(0,0,0,.35) 3px);
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.08;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.28) 2px, rgba(0,0,0,.28) 3px);
   }
-  .vignette {
+  .edge {
     position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 28%, rgba(0,0,0,.78) 100%);
+    background:
+      linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.15) 34%, transparent 52%),
+      radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.28) 100%);
   }
-  .spot {
-    position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(ellipse 45% 40% at 50% 38%, rgba(255,220,170,.16), transparent 60%);
+  .caption {
+    position: absolute; left: 64px; right: 64px; bottom: 48px; z-index: 6;
+    text-shadow: 0 3px 22px rgba(0,0,0,.9);
   }
-  .desk-3d {
-    position: absolute; left: 6%; right: 6%; top: 18%; bottom: 4%;
-    transform: rotateX(48deg) translateY(-40px);
-    transform-style: preserve-3d;
-    background: linear-gradient(180deg, #2a211a, #14100d);
-    box-shadow: 0 40px 80px rgba(0,0,0,.7);
-    border: 1px solid #3a3028;
+  .kicker {
+    font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+    font-size: 16px; letter-spacing: .22em; text-transform: uppercase; color: #D6D2C8;
+    margin-bottom: 12px;
   }
-  .float-card {
-    position: absolute;
-    box-shadow: 0 28px 60px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.04) inset;
-    transform: translateZ(40px);
-  }
-  .polaroid {
-    background: #E8E4DC; padding: 12px 12px 42px; color: #222;
-    box-shadow: 0 22px 50px rgba(0,0,0,.6);
-  }
-  .polaroid img { width: 100%; height: auto; display: block; object-fit: cover; }
-  .polaroid .cap {
-    position: absolute; left: 12px; right: 12px; bottom: 10px;
-    text-align: center; font-size: 15px; letter-spacing: .08em; color: #333;
-  }
-  .prop-shot {
-    position: absolute;
-    filter: drop-shadow(0 30px 40px rgba(0,0,0,.7));
-  }
-  .prop-shot img { width: 100%; height: auto; display: block; }
-  .type {
-    position: absolute; left: 0; right: 0; text-align: center; z-index: 5;
-    text-shadow: 0 4px 28px rgba(0,0,0,.85);
-  }
-  .kicker { font-size: 18px; letter-spacing: .28em; text-transform: uppercase; color: #B7BDC8; }
-  .xl { font-size: 72px; font-weight: 800; line-height: 1.05; }
-  .lg { font-size: 44px; font-weight: 700; line-height: 1.15; }
-  .md { font-size: 28px; color: #C5CAD3; }
+  .xl { font-size: 64px; font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+  .lg { font-size: 36px; font-weight: 600; line-height: 1.2; margin-top: 10px; }
+  .md { font-size: 24px; color: #D8D4CC; margin-top: 10px; }
   .accent { color: #E53935; }
-  .rule { width: 96px; height: 3px; background: #E53935; margin: 18px auto; }
-  .chip {
-    display: inline-block; margin: 6px; padding: 10px 18px;
-    background: rgba(8,10,14,.72); border: 1px solid rgba(242,242,242,.22);
-    backdrop-filter: blur(6px); font-size: 22px; font-weight: 600;
+  .rule { width: 88px; height: 3px; background: #E53935; margin: 14px 0; }
+  .prop {
+    position: absolute; z-index: 4;
+    filter: drop-shadow(0 28px 48px rgba(0,0,0,.75));
   }
-  .chip.hot { border-color: #E53935; color: #E53935; }
+  .prop img { width: 100%; height: auto; display: block; }
   .ring {
-    position: absolute; border: 4px solid #E53935; border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(229,57,53,.2), 0 0 30px rgba(229,57,53,.35);
+    position: absolute; border: 4px solid #E53935; border-radius: 50%; z-index: 5;
+    box-shadow: 0 0 0 3px rgba(229,57,53,.18), 0 0 24px rgba(229,57,53,.3);
   }
-  .dossier {
-    background: linear-gradient(160deg, rgba(22,26,34,.92), rgba(10,12,16,.95));
-    border: 1px solid rgba(255,255,255,.1);
-    box-shadow: 0 24px 50px rgba(0,0,0,.55);
-    padding: 24px; display: flex; gap: 18px; align-items: center;
+  .pin-card {
+    position: absolute; z-index: 5;
+    background: #EFE8DA; color: #1a1510; padding: 22px 26px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.55);
+    transform: rotate(-1.5deg);
   }
-  .dossier img { width: 120px; height: 150px; object-fit: cover; filter: grayscale(1) contrast(1.1); }
-  .dossier h3 { font-size: 32px; margin-bottom: 6px; }
-  .dossier .meta { font-size: 20px; color: #9AA3AD; line-height: 1.45; }
-  .dossier.hot { border-color: rgba(229,57,53,.7); box-shadow: 0 24px 50px rgba(229,57,53,.15); }
-  .news {
-    background: #e8e2d4; color: #111; padding: 26px 30px;
-    box-shadow: 0 28px 60px rgba(0,0,0,.55); transform: rotate(-1.5deg);
+  .pin-card .tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: .18em;
+    text-transform: uppercase; color: #7a6f5f; margin-bottom: 8px;
   }
-  .news .mast { font-size: 13px; letter-spacing: .3em; text-transform: uppercase; border-bottom: 3px solid #111; padding-bottom: 8px; margin-bottom: 12px; }
-  .news h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 40px; line-height: 1.1; margin-bottom: 10px; }
-  .news p { font-size: 17px; line-height: 1.4; }
-  .tape {
-    background: repeating-linear-gradient(45deg, #E5C100, #E5C100 14px, #111 14px, #111 28px);
-    color: #111; font-weight: 900; letter-spacing: .18em; text-align: center;
-    padding: 10px 0; font-size: 16px; text-transform: uppercase;
-    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  .pin-card h3 { font-family: Georgia, "Times New Roman", serif; font-size: 34px; line-height: 1.15; }
+  .pin-card p { font-size: 18px; margin-top: 8px; color: #3a3228; }
+  .pin-card.hot { outline: 3px solid #E53935; }
+  .stamp {
+    position: absolute; z-index: 6;
+    border: 5px solid #E53935; color: #E53935; padding: 14px 22px;
+    font-size: 32px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    transform: rotate(-11deg); background: rgba(8,10,14,.2);
   }
   .hud {
-    position: absolute; top: 24px; left: 28px; z-index: 6;
-    font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #E53935;
-    letter-spacing: .14em; text-shadow: 0 0 12px rgba(229,57,53,.5);
+    position: absolute; top: 28px; left: 32px; z-index: 6;
+    font-family: "IBM Plex Mono", monospace; font-size: 15px; color: #E53935;
+    letter-spacing: .14em; text-shadow: 0 0 10px rgba(229,57,53,.45);
   }
   .rec {
-    position: absolute; top: 24px; right: 28px; z-index: 6; color: #E53935;
-    font-family: 'JetBrains Mono', monospace; letter-spacing: .2em; font-size: 16px;
+    position: absolute; top: 28px; right: 32px; z-index: 6; color: #E53935;
+    font-family: "IBM Plex Mono", monospace; letter-spacing: .18em; font-size: 15px;
   }
-  .rec::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #E53935; margin-right: 8px; }
-  .stamp {
-    border: 5px solid #E53935; color: #E53935; padding: 12px 20px;
-    font-size: 34px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase;
-    transform: rotate(-12deg); background: rgba(8,10,14,.25);
-    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  .rec::before {
+    content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    background: #E53935; margin-right: 8px;
   }
-  .depth-plate {
-    position: absolute;
-    background: rgba(8,10,14,.55);
-    border: 1px solid rgba(255,255,255,.08);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+  .mark {
+    display: inline-block; margin-right: 10px; margin-top: 14px;
+    padding: 8px 14px; border: 1px solid rgba(229,57,53,.85); color: #E53935;
+    font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: .08em;
+    background: rgba(0,0,0,.35);
   }
-</style>
-<div data-hf-id="hf-ktom" id="root" data-composition-id="02-setup" data-start="0" data-duration="25" data-width="1920" data-height="1080">
-  <section data-hf-id="hf-0be6" class="clip layer" id="frame" data-start="0" data-duration="25" data-track-index="1">
 
-  <div data-hf-id="hf-kqms" class="bg-img" style="background-image:url('assets/visuals/interrogation-room.png'); filter:brightness(.55) contrast(1.1);"></div>
-  <div data-hf-id="hf-hmtt" class="spot" style="background:radial-gradient(ellipse 40% 35% at 50% 30%, rgba(255,210,150,.22), transparent 65%);"></div>
-  <div data-hf-id="hf-p1su" class="depth-plate" style="left:90px; top:120px; width:820px; height:820px; padding:0; overflow:hidden;">
-    <div data-hf-id="hf-4g4l" class="bg-img" style="inset:0; background-image:url('assets/visuals/desk-overhead.png'); filter:none; transform:scale(1.2);"></div>
-    <div data-hf-id="hf-3glp" style="position:absolute; left:28px; bottom:28px;" class="chip hot">Erie, PA · Mar 18, 2018</div>
+</style>
+<div data-hf-id="hf-root" id="root" data-composition-id="02-setup" data-start="0" data-duration="25" data-width="1920" data-height="1080">
+  <section data-hf-id="hf-frame" class="clip layer" id="frame" data-start="0" data-duration="25" data-track-index="1">
+
+  <div data-hf-id="hf-bg" class="bg-img" style="background-image:url('file:///workspace/my-video/assets/visuals/interrogation-room.png');"></div>
+  <div data-hf-id="hf-desk" class="prop" style="left:40px; bottom:-40px; width:980px; transform:rotate(-1deg);">
+    <img data-hf-id="hf-di" src="file:///workspace/my-video/assets/visuals/desk-overhead.png" alt="" style="border:8px solid #1a1510; box-shadow:0 30px 70px rgba(0,0,0,.7);">
   </div>
-  <div data-hf-id="hf-2y4n" style="position:absolute; right:90px; top:180px; width:860px; display:flex; flex-direction:column; gap:28px; z-index:4;">
-    <div data-hf-id="hf-78f3" class="dossier">
-      <img data-hf-id="hf-3zqu" src="assets/visuals/prop-typewriter.png">
-      <div data-hf-id="hf-yeow">
-        <div data-hf-id="hf-raa3" class="kicker">Victim</div>
-        <h3 data-hf-id="hf-8z4u">Keeno Butler</h3>
-        <div data-hf-id="hf-xd59" class="meta">Age 44 · <b data-hf-id="hf-1i7q" style="color:#F2F2F2">120 lbs</b><br data-hf-id="hf-x5px">Pennsylvania</div>
-      </div>
-    </div>
-    <div data-hf-id="hf-asoa" class="dossier hot">
-      <img data-hf-id="hf-ip0y" src="assets/visuals/props-white-mold.png" style="object-position:left center;">
-      <div data-hf-id="hf-y7yw">
-        <div data-hf-id="hf-b34h" class="kicker accent">Girlfriend</div>
-        <h3 data-hf-id="hf-blcz">Windi Thomas</h3>
-        <div data-hf-id="hf-o2er" class="meta">Age 44 · <b data-hf-id="hf-gjqa" class="accent">300+ lbs</b><br data-hf-id="hf-rsrt"><span data-hf-id="hf-evb3" class="accent">More than twice his weight</span></div>
-      </div>
-    </div>
+  <div data-hf-id="hf-c1" class="pin-card" style="right:90px; top:170px; width:520px;">
+    <div data-hf-id="hf-t1" class="tag">Victim · file card</div>
+    <h3 data-hf-id="hf-h1">Keeno Butler</h3>
+    <p data-hf-id="hf-p1">Age 44 · 120 lbs · Pennsylvania</p>
   </div>
-  <div data-hf-id="hf-h60x" class="grain"></div><div data-hf-id="hf-q7bi" class="vignette"></div>
+  <div data-hf-id="hf-c2" class="pin-card hot" style="right:70px; top:430px; width:560px; transform:rotate(1.8deg);">
+    <div data-hf-id="hf-t2" class="tag" style="color:#E53935;">Girlfriend · file card</div>
+    <h3 data-hf-id="hf-h2">Windi Thomas</h3>
+    <p data-hf-id="hf-p2">Age 44 · <b style="color:#E53935;">300+ lbs</b> — more than twice his weight</p>
+  </div>
+  <div data-hf-id="hf-edge" class="edge"></div>
+  <div data-hf-id="hf-cap" class="caption" style="right:auto; width:720px;">
+    <div data-hf-id="hf-k" class="kicker">Erie, PA · March 18, 2018</div>
+    <div data-hf-id="hf-l" class="lg">Messy. Unstable. Alcohol, drugs, breakups.</div>
+  </div>
+  <div data-hf-id="hf-g" class="grain"></div>
 
   </section>
 </div>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+
+  gsap.set([".prop", ".pin-card", ".caption"], { autoAlpha: 0 });
+  tl.fromTo(".bg-img", { scale: 1.1 }, { scale: 1.02, duration: 25, ease: "none" }, 0);
+  tl.to(".prop", { autoAlpha: 1, duration: 0.7 }, 0.2);
+  tl.from(".prop", { x: -40, duration: 0.9, ease: "power2.out" }, 0.2);
+  tl.to(".pin-card", { autoAlpha: 1, stagger: 0.35, duration: 0.55 }, 0.7);
+  tl.from(".pin-card", { y: 30, stagger: 0.35, duration: 0.75, ease: "power2.out" }, 0.7);
+  tl.to(".caption", { autoAlpha: 1, duration: 0.6 }, 1.5);
+
+  window.__timelines["02-setup"] = tl;
+  tl.seek(Math.min(2.4, 25 * 0.35));
+</script>
+
+
+<script>
+  // Force end-state visibility for still export
+  document.querySelectorAll('.prop, .caption, .pin-card, .ring, .stamp, .mark, .hud, .rec').forEach(el => {
+    el.style.opacity = '1';
+    el.style.visibility = 'visible';
+  });
+  if (window.__timelines) {
+    Object.values(window.__timelines).forEach(tl => {
+      try { tl.progress(1).pause(); } catch(e) {}
+    });
+  }
+</script>
 
 </body>
 </html>
