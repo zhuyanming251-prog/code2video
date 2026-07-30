@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #05070a; }
+      body { font-family: "Inter", sans-serif; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #05070a; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-x0rx" id="root" data-composition-id="my-video" data-start="0" data-duration="300" data-fps="24" data-width="1920" data-height="1080">
+      <div data-hf-id="hf-h7m5" id="frame-01-hook" data-composition-id="frame-01-hook" data-composition-src="compositions/frames/01-hook.html" data-start="0" data-duration="10" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-r34d" id="frame-02-setup" data-composition-id="frame-02-setup" data-composition-src="compositions/frames/02-setup.html" data-start="10" data-duration="25" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-hg34" id="frame-03-warning" data-composition-id="frame-03-warning" data-composition-src="compositions/frames/03-warning.html" data-start="35" data-duration="30" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-ae4i" id="frame-04-fight-knife" data-composition-id="frame-04-fight-knife" data-composition-src="compositions/frames/04-fight-knife.html" data-start="65" data-duration="25" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-93mi" id="frame-05-fight-table-leg" data-composition-id="frame-05-fight-table-leg" data-composition-src="compositions/frames/05-fight-table-leg.html" data-start="90" data-duration="15" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-lbzp" id="frame-06-body-weight" data-composition-id="frame-06-body-weight" data-composition-src="compositions/frames/06-body-weight.html" data-start="105" data-duration="40" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-8hdy" id="frame-07-death-detail" data-composition-id="frame-07-death-detail" data-composition-src="compositions/frames/07-death-detail.html" data-start="145" data-duration="30" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-1qb1" id="frame-08-aftermath" data-composition-id="frame-08-aftermath" data-composition-src="compositions/frames/08-aftermath.html" data-start="175" data-duration="35" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-qmyy" id="frame-09-investigation" data-composition-id="frame-09-investigation" data-composition-src="compositions/frames/09-investigation.html" data-start="210" data-duration="35" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-aw7e" id="frame-10-court" data-composition-id="frame-10-court" data-composition-src="compositions/frames/10-court.html" data-start="245" data-duration="30" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <div data-hf-id="hf-ixxo" id="frame-11-ending" data-composition-id="frame-11-ending" data-composition-src="compositions/frames/11-ending.html" data-start="275" data-duration="25" data-track-index="1" data-width="1920" data-height="1080"></div>
+      <audio data-hf-id="hf-zvka" id="bgm" src="assets/audio/low-drone.mp3" data-start="0" data-duration="300" data-track-index="10" data-volume="0.22" data-media-start="0"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["my-video"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
