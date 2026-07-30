@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <title>09-investigation final still</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>html,body{margin:0;padding:0;background:#000;overflow:hidden;width:1920px;height:1080px;}</style>
+</head>
+<body>
+
+<style>
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  #root {
+    position: absolute; inset: 0; width: 1920px; height: 1080px;
+    overflow: hidden; background: #0a0c10; color: #F2F2F2;
+    font-family: "IBM Plex Sans", "Helvetica Neue", sans-serif;
+  }
+  .layer { position: absolute; inset: 0; }
+  .bg-img {
+    position: absolute; inset: -2%;
+    background-size: cover; background-position: center;
+    transform: scale(1.04);
+  }
+  .dv-grade {
+    filter: contrast(1.12) saturate(0.78) sepia(0.12) hue-rotate(-6deg) brightness(0.98);
+  }
+  .grain {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.14; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+  .scanlines {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.08;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.28) 2px, rgba(0,0,0,.28) 3px);
+  }
+  .edge {
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.15) 34%, transparent 52%),
+      radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.28) 100%);
+  }
+  .caption {
+    position: absolute; left: 64px; right: 64px; bottom: 48px; z-index: 6;
+    text-shadow: 0 3px 22px rgba(0,0,0,.9);
+  }
+  .kicker {
+    font-family: "IBM Plex Mono", "JetBrains Mono", monospace;
+    font-size: 16px; letter-spacing: .22em; text-transform: uppercase; color: #D6D2C8;
+    margin-bottom: 12px;
+  }
+  .xl { font-size: 64px; font-weight: 700; line-height: 1.05; letter-spacing: -0.02em; }
+  .lg { font-size: 36px; font-weight: 600; line-height: 1.2; margin-top: 10px; }
+  .md { font-size: 24px; color: #D8D4CC; margin-top: 10px; }
+  .accent { color: #E53935; }
+  .rule { width: 88px; height: 3px; background: #E53935; margin: 14px 0; }
+  .prop {
+    position: absolute; z-index: 4;
+    filter: drop-shadow(0 28px 48px rgba(0,0,0,.75));
+  }
+  .prop img { width: 100%; height: auto; display: block; }
+  .ring {
+    position: absolute; border: 4px solid #E53935; border-radius: 50%; z-index: 5;
+    box-shadow: 0 0 0 3px rgba(229,57,53,.18), 0 0 24px rgba(229,57,53,.3);
+  }
+  .pin-card {
+    position: absolute; z-index: 5;
+    background: #EFE8DA; color: #1a1510; padding: 22px 26px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.55);
+    transform: rotate(-1.5deg);
+  }
+  .pin-card .tag {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px; letter-spacing: .18em;
+    text-transform: uppercase; color: #7a6f5f; margin-bottom: 8px;
+  }
+  .pin-card h3 { font-family: Georgia, "Times New Roman", serif; font-size: 34px; line-height: 1.15; }
+  .pin-card p { font-size: 18px; margin-top: 8px; color: #3a3228; }
+  .pin-card.hot { outline: 3px solid #E53935; }
+  .stamp {
+    position: absolute; z-index: 6;
+    border: 5px solid #E53935; color: #E53935; padding: 14px 22px;
+    font-size: 32px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    transform: rotate(-11deg); background: rgba(8,10,14,.2);
+  }
+  .hud {
+    position: absolute; top: 28px; left: 32px; z-index: 6;
+    font-family: "IBM Plex Mono", monospace; font-size: 15px; color: #E53935;
+    letter-spacing: .14em; text-shadow: 0 0 10px rgba(229,57,53,.45);
+  }
+  .rec {
+    position: absolute; top: 28px; right: 32px; z-index: 6; color: #E53935;
+    font-family: "IBM Plex Mono", monospace; letter-spacing: .18em; font-size: 15px;
+  }
+  .rec::before {
+    content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    background: #E53935; margin-right: 8px;
+  }
+  .mark {
+    display: inline-block; margin-right: 10px; margin-top: 14px;
+    padding: 8px 14px; border: 1px solid rgba(229,57,53,.85); color: #E53935;
+    font-family: "IBM Plex Mono", monospace; font-size: 18px; letter-spacing: .08em;
+    background: rgba(0,0,0,.35);
+  }
+
+</style>
+<div data-hf-id="hf-root" id="root" data-composition-id="09-investigation" data-start="0" data-duration="35" data-width="1920" data-height="1080">
+  <section data-hf-id="hf-frame" class="clip layer" id="frame" data-start="0" data-duration="35" data-track-index="1">
+
+  <div data-hf-id="hf-bg" class="bg-img" style="background-image:url('file:///workspace/my-video/assets/visuals/desk-overhead.png'); transform:scale(1.06);"></div>
+  <div data-hf-id="hf-prop" class="prop" style="right:40px; top:40px; width:900px;">
+    <img data-hf-id="hf-pi" src="file:///workspace/my-video/assets/visuals/prop-table-leg-bag.png" alt="">
+  </div>
+  <div data-hf-id="hf-dv" class="prop" style="left:70px; top:100px; width:460px; transform:rotate(-5deg);">
+    <img data-hf-id="hf-dvi" src="file:///workspace/my-video/assets/visuals/dv-apartment.png" alt="" style="border:12px solid #efe8da; box-shadow:0 22px 50px rgba(0,0,0,.55);">
+  </div>
+  <div data-hf-id="hf-ring" class="ring" style="right:260px; top:210px; width:180px; height:180px;"></div>
+  <div data-hf-id="hf-hud" class="hud">SCENE · LIVING ROOM FLOOR</div>
+  <div data-hf-id="hf-edge" class="edge"></div>
+  <div data-hf-id="hf-cap" class="caption">
+    <div data-hf-id="hf-k" class="kicker">Police arrival · evidence inventory</div>
+    <div data-hf-id="hf-x" class="xl" style="font-size:48px;">Blood-stained table leg</div>
+    <div data-hf-id="hf-m" class="md">Found near the body · living room floor · <span class="accent">911 confession on record</span></div>
+  </div>
+  <div data-hf-id="hf-g" class="grain"></div>
+
+  </section>
+</div>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+
+  gsap.set([".prop", ".caption", ".ring"], { autoAlpha: 0 });
+  tl.fromTo(".bg-img", { scale: 1.1 }, { scale: 1.03, duration: 35, ease: "none" }, 0);
+  tl.to(".prop", { autoAlpha: 1, stagger: 0.22, duration: 0.6 }, 0.25);
+  tl.from(".prop", { y: 28, stagger: 0.22, duration: 0.8, ease: "power2.out" }, 0.25);
+  tl.to(".caption", { autoAlpha: 1, duration: 0.65 }, 1.0);
+  tl.to(".ring", { autoAlpha: 1, duration: 0.3 }, 1.35);
+
+  window.__timelines["09-investigation"] = tl;
+  tl.seek(Math.min(2.4, 35 * 0.35));
+</script>
+
+
+<script>
+  // Force end-state visibility for still export
+  document.querySelectorAll('.prop, .caption, .pin-card, .ring, .stamp, .mark, .hud, .rec').forEach(el => {
+    el.style.opacity = '1';
+    el.style.visibility = 'visible';
+  });
+  if (window.__timelines) {
+    Object.values(window.__timelines).forEach(tl => {
+      try { tl.progress(1).pause(); } catch(e) {}
+    });
+  }
+</script>
+
+</body>
+</html>

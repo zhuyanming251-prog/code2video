@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>Court</title>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+</head>
+<body>
+<template>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  #root {
+    position: absolute; inset: 0; width: 1920px; height: 1080px;
+    overflow: hidden; background: #07090d; color: #F2F2F2;
+    font-family: Inter, "Helvetica Neue", sans-serif;
+    perspective: 1400px;
+  }
+  .layer { position: absolute; inset: 0; }
+  .bg-img {
+    position: absolute; inset: -4%;
+    background-size: cover; background-position: center;
+    filter: contrast(1.08) saturate(0.85);
+    transform: scale(1.06);
+  }
+  .dv-grade {
+    filter: contrast(1.2) saturate(0.7) sepia(0.18) hue-rotate(-8deg) brightness(0.92);
+  }
+  .grain {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.16; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+  .scanlines {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.12;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.35) 2px, rgba(0,0,0,.35) 3px);
+  }
+  .vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 28%, rgba(0,0,0,.78) 100%);
+  }
+  .spot {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 45% 40% at 50% 38%, rgba(255,220,170,.16), transparent 60%);
+  }
+  .desk-3d {
+    position: absolute; left: 6%; right: 6%; top: 18%; bottom: 4%;
+    transform: rotateX(48deg) translateY(-40px);
+    transform-style: preserve-3d;
+    background: linear-gradient(180deg, #2a211a, #14100d);
+    box-shadow: 0 40px 80px rgba(0,0,0,.7);
+    border: 1px solid #3a3028;
+  }
+  .float-card {
+    position: absolute;
+    box-shadow: 0 28px 60px rgba(0,0,0,.65), 0 2px 0 rgba(255,255,255,.04) inset;
+    transform: translateZ(40px);
+  }
+  .polaroid {
+    background: #E8E4DC; padding: 12px 12px 42px; color: #222;
+    box-shadow: 0 22px 50px rgba(0,0,0,.6);
+  }
+  .polaroid img { width: 100%; height: auto; display: block; object-fit: cover; }
+  .polaroid .cap {
+    position: absolute; left: 12px; right: 12px; bottom: 10px;
+    text-align: center; font-size: 15px; letter-spacing: .08em; color: #333;
+  }
+  .prop-shot {
+    position: absolute;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,.7));
+  }
+  .prop-shot img { width: 100%; height: auto; display: block; }
+  .type {
+    position: absolute; left: 0; right: 0; text-align: center; z-index: 5;
+    text-shadow: 0 4px 28px rgba(0,0,0,.85);
+  }
+  .kicker { font-size: 18px; letter-spacing: .28em; text-transform: uppercase; color: #B7BDC8; }
+  .xl { font-size: 72px; font-weight: 800; line-height: 1.05; }
+  .lg { font-size: 44px; font-weight: 700; line-height: 1.15; }
+  .md { font-size: 28px; color: #C5CAD3; }
+  .accent { color: #E53935; }
+  .rule { width: 96px; height: 3px; background: #E53935; margin: 18px auto; }
+  .chip {
+    display: inline-block; margin: 6px; padding: 10px 18px;
+    background: rgba(8,10,14,.72); border: 1px solid rgba(242,242,242,.22);
+    backdrop-filter: blur(6px); font-size: 22px; font-weight: 600;
+  }
+  .chip.hot { border-color: #E53935; color: #E53935; }
+  .ring {
+    position: absolute; border: 4px solid #E53935; border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(229,57,53,.2), 0 0 30px rgba(229,57,53,.35);
+  }
+  .dossier {
+    background: linear-gradient(160deg, rgba(22,26,34,.92), rgba(10,12,16,.95));
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 24px 50px rgba(0,0,0,.55);
+    padding: 24px; display: flex; gap: 18px; align-items: center;
+  }
+  .dossier img { width: 120px; height: 150px; object-fit: cover; filter: grayscale(1) contrast(1.1); }
+  .dossier h3 { font-size: 32px; margin-bottom: 6px; }
+  .dossier .meta { font-size: 20px; color: #9AA3AD; line-height: 1.45; }
+  .dossier.hot { border-color: rgba(229,57,53,.7); box-shadow: 0 24px 50px rgba(229,57,53,.15); }
+  .news {
+    background: #e8e2d4; color: #111; padding: 26px 30px;
+    box-shadow: 0 28px 60px rgba(0,0,0,.55); transform: rotate(-1.5deg);
+  }
+  .news .mast { font-size: 13px; letter-spacing: .3em; text-transform: uppercase; border-bottom: 3px solid #111; padding-bottom: 8px; margin-bottom: 12px; }
+  .news h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 40px; line-height: 1.1; margin-bottom: 10px; }
+  .news p { font-size: 17px; line-height: 1.4; }
+  .tape {
+    background: repeating-linear-gradient(45deg, #E5C100, #E5C100 14px, #111 14px, #111 28px);
+    color: #111; font-weight: 900; letter-spacing: .18em; text-align: center;
+    padding: 10px 0; font-size: 16px; text-transform: uppercase;
+    box-shadow: 0 10px 30px rgba(0,0,0,.45);
+  }
+  .hud {
+    position: absolute; top: 24px; left: 28px; z-index: 6;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #E53935;
+    letter-spacing: .14em; text-shadow: 0 0 12px rgba(229,57,53,.5);
+  }
+  .rec {
+    position: absolute; top: 24px; right: 28px; z-index: 6; color: #E53935;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: .2em; font-size: 16px;
+  }
+  .rec::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #E53935; margin-right: 8px; }
+  .stamp {
+    border: 5px solid #E53935; color: #E53935; padding: 12px 20px;
+    font-size: 34px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase;
+    transform: rotate(-12deg); background: rgba(8,10,14,.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  }
+  .depth-plate {
+    position: absolute;
+    background: rgba(8,10,14,.55);
+    border: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+  }
+</style>
+<div data-hf-id="hf-iarh" id="root" data-composition-id="10-court" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+  <section data-hf-id="hf-v9j8" class="clip layer" id="frame" data-start="0" data-duration="30" data-track-index="1">
+
+  <div data-hf-id="hf-ddl1" class="bg-img" style="background-image:url('assets/visuals/interrogation-room.png'); filter:brightness(.42);"></div>
+  <div data-hf-id="hf-3eug" class="spot"></div>
+  <div data-hf-id="hf-s70x" class="prop-shot" style="left:80px; top:120px; width:980px;">
+    <img data-hf-id="hf-f9ke" src="assets/visuals/props-white-mold.png">
+  </div>
+  <div data-hf-id="hf-tk5x" class="stamp" style="position:absolute; left:620px; top:560px; z-index:6; font-size:42px;">GUILTY</div>
+  <div data-hf-id="hf-053x" class="news float-card" style="right:90px; top:180px; width:720px; z-index:5; transform:rotate(2deg);">
+    <div data-hf-id="hf-rjro" class="mast">Court report</div>
+    <h2 data-hf-id="hf-qlxq">Third-degree murder</h2>
+    <p data-hf-id="hf-mekt">Plea entered. Sentence: 18 to 36 years. Prosecutors cited the knife, the table leg, and the crushing pressure of a 300-pound body.</p>
+  </div>
+  <div data-hf-id="hf-k1pn" style="position:absolute; right:120px; bottom:120px; z-index:6;">
+    <span data-hf-id="hf-zxhw" class="chip">Knife</span><span data-hf-id="hf-fs1x" class="chip">Table leg</span><span data-hf-id="hf-ulgj" class="chip hot">300-lb pressure</span>
+  </div>
+  <div data-hf-id="hf-h60x" class="grain"></div><div data-hf-id="hf-q7bi" class="vignette"></div>
+
+  </section>
+</div>
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  
+  gsap.set([".prop-shot", ".news", ".stamp", ".chip"], { autoAlpha: 0 });
+  tl.fromTo(".bg-img", { scale: 1.1 }, { scale: 1.02, duration: 30, ease: "none" }, 0);
+  tl.to(".prop-shot", { autoAlpha: 1, duration: 0.65 }, 0.2);
+  tl.from(".prop-shot", { y: 24, duration: 0.85, ease: "power2.out" }, 0.2);
+  tl.to(".news", { autoAlpha: 1, duration: 0.55 }, 0.9);
+  tl.from(".news", { x: 34, duration: 0.85, ease: "power2.out" }, 0.9);
+  tl.to(".stamp", { autoAlpha: 1, duration: 0.2 }, 1.5);
+  tl.from(".stamp", { scale: 1.15, rotation: -20, duration: 0.4, ease: "power2.out" }, 1.5);
+  tl.to(".chip", { autoAlpha: 1, stagger: 0.1, duration: 0.25 }, 1.8);
+
+  window.__timelines["10-court"] = tl;
+  tl.seek(0);
+</script>
+</template>
+</body>
+</html>

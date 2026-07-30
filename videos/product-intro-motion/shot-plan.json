@@ -1,0 +1,53 @@
+{
+  "category": "kinetic-type",
+  "duration_s": 10,
+  "fps": 30,
+  "canvas": { "w": 1920, "h": 1080, "aspect": "16:9" },
+  "style": "Dark premium product intro — quiet cinematic title card. Soft fade-in typography on a deep navy field with a subtle gradient atmosphere. Unnarrated; motion is a slow fade reveal.",
+  "palette": ["#0B1220", "#14213D", "#1B263B", "#778DA9", "#E8EEF7", "#2EC4B6"],
+  "font": "Montserrat",
+  "beats": [0.4, 2.2, 5.0, 8.5],
+  "export": "mp4",
+  "asset_needs": [],
+  "block": null,
+  "customize": {
+    "motion": "fade",
+    "bgm": "assets/bgm/soft-ambient.mp3",
+    "bgm_volume": 0.55
+  },
+  "content": {
+    "scenes": [
+      {
+        "id": "hook",
+        "start": 0,
+        "end": 2.4,
+        "text": "AURA",
+        "emphasis_words": ["AURA"],
+        "emotion": "quiet confidence",
+        "motion": "soft fade + slight rise",
+        "beats": [0.4]
+      },
+      {
+        "id": "title",
+        "start": 2.4,
+        "end": 6.2,
+        "text": "重新定义协作",
+        "emphasis_words": ["协作"],
+        "emotion": "clarity",
+        "motion": "fade in",
+        "beats": [2.6]
+      },
+      {
+        "id": "resolve",
+        "start": 6.2,
+        "end": 10,
+        "text": "为现代团队打造的智能工作台",
+        "emphasis_words": [],
+        "emotion": "reassurance",
+        "motion": "soft fade in, hold, fade out",
+        "beats": [8.5]
+      }
+    ]
+  },
+  "shot_brief": "A 10s dark product title card for fictional SaaS AURA. Brand wordmark fades in first, then the Chinese hero title, then a supporting line. Soft ambient pad underpins the whole piece; one dominant motif — fade."
+}
